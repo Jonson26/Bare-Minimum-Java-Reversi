@@ -1,2 +1,2 @@
 cd build
-jar cvfm Reversi.jar MANIFEST.MF *.class img
+jar cvfm Reversi.jar manifest.txt *.class img
