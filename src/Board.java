@@ -15,25 +15,33 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.lang.Thread;
-
+/*
+This class contains most of the game logic.
+It is also used to "glue" all the other classes together
+*/
 public class Board extends JPanel implements MouseListener {
-	private static final int SIDE = 29*8+1;
-	private static final double SCALE = 2.0;
-	private static final String[] aiModes = {"Human", "Dumb", "Smart", "Smart+"};
+	private static final double SCALE = 2.0; //Ratio describing how the rendered game image should be scaled (2.0 means it should be 2x bigger)
+	private static final String[] aiModes = {"Human", "Dumb", "Smart", "Smart+"}; //List of the possible AI modes
 	
-	private String[] aiMode;
-	private int[][] board;
-	private int player;
-	private boolean win;
+	private String[] aiMode; //Stores the current AI mode of both players ([0]->Black, [1]->White)
+	/*
+	8 by 8 array of integers storing the current state of the game board
+	Allowed values are:
+		0 - Empty
+		1 - Black
+		2 - White
+	*/
+	private int[][] board; 
+	private int player; //The player whose turn it currently is
+	private boolean win; //Determines whether the current game session is finished
 	
 	private Renderer renderer;
-	private BufferedImage background;
+	private BufferedImage background; //Empty game board saved to save time on rendering
 	private ScoreDisplay scoreDisplay;
 	private JComboBox bSelector, wSelector;
 	
 	public Board(){
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(SIDE, SIDE));
 		
 		addMouseListener(this);
 		
@@ -43,12 +51,12 @@ public class Board extends JPanel implements MouseListener {
 		scoreDisplay = new ScoreDisplay();
 		controlPanel.add(scoreDisplay, BorderLayout.NORTH);
 		
-		controlPanel.add(initSelectorPanel(), BorderLayout.SOUTH);
+		controlPanel.add(initControlPanel(), BorderLayout.SOUTH);
 		
 		add(controlPanel, BorderLayout.EAST);
 		
 		renderer = new Renderer();
-		background = renderer.renderBackGround();
+		background = renderer.renderBackGround(); //Immediately prerender the background
 		
 		String[] aiMode = {"Human", "Dumb"};
 		this.aiMode = aiMode;
@@ -56,6 +64,7 @@ public class Board extends JPanel implements MouseListener {
 		initGameState();
 	}
 	
+	//Method to initialize the game state
 	public void initGameState(){
 		int[][] board = {
 			{0,0,0,0,0,0,0,0},
@@ -72,11 +81,12 @@ public class Board extends JPanel implements MouseListener {
 		win = false;
 	}
 	
-	public JPanel initSelectorPanel(){
+	//Method that initializes the control panel of the game
+	public JPanel initControlPanel(){
 		JPanel selectorPanel = new JPanel();
 		selectorPanel.setLayout(new BoxLayout(selectorPanel, BoxLayout.Y_AXIS));
 		
-		Font contentFont = new Font("Courier New", Font.PLAIN, 18);
+		Font contentFont = new Font("Courier New", Font.PLAIN, 18); //Font for use by the normal components
 		
 		bSelector = new JComboBox(aiModes);
 		wSelector = new JComboBox(aiModes);
@@ -121,13 +131,15 @@ public class Board extends JPanel implements MouseListener {
 		return selectorPanel;
 	}
 	
+	
+	//Method where the rendering happens
 	public void paintComponent(Graphics g) {
         super.paintComponent(g);
 		
-		int[][] pBoard = Util.prepareForRender(board, player);
-		BufferedImage frame = renderer.renderPieces(background, pBoard);
-		BufferedImage scaledFrame = renderer.scale(frame, SCALE);
-		g.drawImage(scaledFrame, 0, 0, this);
+		int[][] pBoard = Util.prepareForRender(board, player); //Prepare a version of the board with the available moves marked with a "3"
+		BufferedImage frame = renderer.renderPieces(background, pBoard); //Render the pieces onto the prerendered background
+		BufferedImage scaledFrame = renderer.scale(frame, SCALE); //Scale the resulting frame
+		g.drawImage(scaledFrame, 0, 0, this); //Copy the frame onto the screen
     }
 	
 	private void performMove(int x, int y){
@@ -143,6 +155,7 @@ public class Board extends JPanel implements MouseListener {
 		new AIThread().start();
 	}
 	
+	//This method updates the game's score display and checks whether the game has ended
 	private void updateGameState(){
 		int bs = Util.countScore(board, 1);
 		int ws = Util.countScore(board, 2);
@@ -190,6 +203,7 @@ public class Board extends JPanel implements MouseListener {
 		
 	}
 	
+	//Internal class responsible for starting a new game session
 	private class NewGameListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
@@ -200,6 +214,7 @@ public class Board extends JPanel implements MouseListener {
 		}
 	}
 	
+	//Internal class responsible for changing the AI modes of the players to the ones selected by the user
 	private class AIModeListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
@@ -212,6 +227,7 @@ public class Board extends JPanel implements MouseListener {
 		}
 	}
 	
+	//Simple thread meant to perform a single AI turn
 	private class AIThread extends Thread{
 		@Override
 		public void run(){
