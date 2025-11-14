@@ -20,7 +20,6 @@ This class contains most of the game logic.
 It is also used to "glue" all the other classes together
 */
 public class Board extends JPanel implements MouseListener {
-	private static final double SCALE = 2.0; //Ratio describing how the rendered game image should be scaled (2.0 means it should be 2x bigger)
 	private static final String[] aiModes = {"Human", "Dumb", "Smart", "Smart+"}; //List of the possible AI modes
 	
 	private String[] aiMode; //Stores the current AI mode of both players ([0]->Black, [1]->White)
@@ -138,7 +137,7 @@ public class Board extends JPanel implements MouseListener {
 		
 		int[][] pBoard = Util.prepareForRender(board, player); //Prepare a version of the board with the available moves marked with a "3"
 		BufferedImage frame = renderer.renderPieces(background, pBoard); //Render the pieces onto the prerendered background
-		BufferedImage scaledFrame = renderer.scale(frame, SCALE); //Scale the resulting frame
+		BufferedImage scaledFrame = renderer.scale(frame, Util.SCALE); //Scale the resulting frame
 		g.drawImage(scaledFrame, 0, 0, this); //Copy the frame onto the screen
     }
 	
@@ -179,7 +178,7 @@ public class Board extends JPanel implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e){
-		if(isHumanTurn()) performMove(Util.adjustCoordinate(e.getX(), SCALE), Util.adjustCoordinate(e.getY(), SCALE));
+		if(isHumanTurn()) performMove(Util.adjustCoordinate(e.getX(), Util.SCALE), Util.adjustCoordinate(e.getY(), Util.SCALE));
 		repaint();
 	}
 	

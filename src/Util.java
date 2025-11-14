@@ -2,6 +2,9 @@
 Utility class with static methods useful throught the whole codebase.
 */
 public class Util{
+	public static final int TILESIZE = 29; //Determines how big a tile should be
+	public static final int SIDE = TILESIZE*8+1; //Determines how big the board should be
+	public static final double SCALE = 2.0; //Ratio describing how the rendered game image should be scaled (2.0 means it should be 2x bigger)
 	
 	/*
 	Method meant for the tile flipping mechanic from reversi.
@@ -133,7 +136,7 @@ public class Util{
 	
 	//Normalizes coordinates from render space to game space
 	public static int adjustCoordinate(int n, double scale){
-		n = (int)((n/scale)/29.0);
+		n = (int)((n/scale)/(TILESIZE*1.0));
 		if(n<0) n=0;
 		if(n>7) n=7;
 		return n;

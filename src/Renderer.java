@@ -5,13 +5,14 @@ import java.awt.Graphics;
 import java.awt.Color;
 import javax.imageio.ImageIO;
 
+/*
+This class contains most of the rendering code.
+*/
 public class Renderer{
-	private static final int SIDE = 29*8+1;
-	
-	private BufferedImage empty, black, white, possible;
+	private BufferedImage empty, black, white, possible; //The assets
 	
 	public Renderer(){
-		loadAssets();
+		loadAssets(); //Load the assets immediately
 	}
 	
 	public void loadAssets(){
@@ -21,31 +22,32 @@ public class Renderer{
 			white    = ImageIO.read(getClass().getClassLoader().getResource("img/white.png"));
 			possible = ImageIO.read(getClass().getClassLoader().getResource("img/possible.png"));
 		}catch(Exception ex){
-			System.out.println("Could not load resource");
+			System.out.println("Could not load resources");
 		}
 	}
 	
 	public BufferedImage renderBackGround(){
-		BufferedImage out = new BufferedImage(SIDE, SIDE, BufferedImage.TYPE_INT_ARGB_PRE);
+		BufferedImage out = new BufferedImage(Util.SIDE, Util.SIDE, BufferedImage.TYPE_INT_ARGB_PRE);
 		
 		Graphics g = out.getGraphics();
 		
 		g.setColor(Color.WHITE);
-		g.fillRect(0,0,SIDE,SIDE);
+		g.fillRect(0,0,Util.SIDE,Util.SIDE);
 		
 		g.setColor(Color.BLACK);
-		g.drawRect(0,0,SIDE-1,SIDE-1);
+		g.drawRect(0,0,Util.SIDE-1,Util.SIDE-1);
         for(int i=0; i<8; i++){
-			int h = 29*i;
-			g.drawLine(0, h, SIDE,    h);
-			g.drawLine(h, 0,    h, SIDE);
+			int h = Util.TILESIZE*i;
+			g.drawLine(0, h, Util.SIDE,         h);
+			g.drawLine(h, 0,         h, Util.SIDE);
 		}
 		
 		return out;
 	}
 	
+	//Renders the provided game board onto the provided background image
 	public BufferedImage renderPieces(BufferedImage background, int[][] board){
-		BufferedImage out = new BufferedImage(SIDE, SIDE, BufferedImage.TYPE_INT_ARGB_PRE);
+		BufferedImage out = new BufferedImage(Util.SIDE, Util.SIDE, BufferedImage.TYPE_INT_ARGB_PRE);
 		
 		Graphics g = out.getGraphics();
 		
@@ -71,13 +73,14 @@ public class Renderer{
 						toDraw = black;
 						break;
 				}
-				g.drawImage(toDraw, 29*i+1, 29*j+1, null);
+				g.drawImage(toDraw, Util.TILESIZE*i+1, Util.TILESIZE*j+1, null);
 			}
 		}
 		
 		return out;
 	}
 	
+	//Method used to scale a game frame to the desired size. Useful because monitors are getting bigger and bigger.
 	public static BufferedImage scale(BufferedImage before, double scale) {
 		int w = before.getWidth();
 		int h = before.getHeight();
