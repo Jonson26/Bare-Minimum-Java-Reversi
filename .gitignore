@@ -1,0 +1,3 @@
+#Ignore all files generated during build time
+build/*.class
+build/Reversi.jar
