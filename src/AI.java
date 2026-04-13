@@ -14,15 +14,14 @@ public class AI{
 	*/
 	public static int[] decide(int[][] board, int player, String mode){
 		int[] dummy = {-1, -1};
-		switch(mode){
-			case "Dumb":
-				return dumb(board, player);
-			case "Smart":
-				return smart(board, player);
-			case "Smart+":
-				return smartPlus(board, player);
-			default:
-				return dummy;
+		if(mode == "Dumb"){
+			return dumb(board, player);
+		}else if(mode == "Smart"){
+			return smart(board, player);
+		}else if(mode == "Smart+"){
+			return smartPlus(board, player);
+		}else{
+			return dummy;
 		}
 	}
 	

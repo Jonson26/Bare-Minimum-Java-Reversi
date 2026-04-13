@@ -175,35 +175,29 @@ public class Board extends JPanel implements MouseListener {
 		return aiMode[player-1]=="Human";
 	}
 	
-	@Override
 	public void mouseClicked(MouseEvent e){
 		if(isHumanTurn()) performMove(Util.adjustCoordinate(e.getX(), Util.SCALE), Util.adjustCoordinate(e.getY(), Util.SCALE));
 		repaint();
 	}
 	
-	@Override
 	public void mousePressed(MouseEvent e){
 		
 	}
 	
-	@Override
 	public void mouseReleased(MouseEvent e){
 		
 	}
 	
-	@Override
 	public void mouseEntered(MouseEvent e){
 		
 	}
 	
-	@Override
 	public void mouseExited(MouseEvent e){
 		
 	}
 	
 	//Internal class responsible for starting a new game session
 	private class NewGameListener implements ActionListener{
-		@Override
 		public void actionPerformed(ActionEvent e){
 			initGameState();
 			updateGameState();
@@ -214,7 +208,6 @@ public class Board extends JPanel implements MouseListener {
 	
 	//Internal class responsible for changing the AI modes of the players to the ones selected by the user
 	private class AIModeListener implements ActionListener{
-		@Override
 		public void actionPerformed(ActionEvent e){
 			String[] tempMode = {
 				aiModes[bSelector.getSelectedIndex()], 
@@ -227,7 +220,6 @@ public class Board extends JPanel implements MouseListener {
 	
 	//Simple thread meant to perform a single AI turn
 	private class AIThread extends Thread{
-		@Override
 		public void run(){
 			if(!isHumanTurn()){
 				try{
