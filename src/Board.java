@@ -135,7 +135,7 @@ public class Board extends JPanel implements MouseListener {
         super.paintComponent(g);
 		
 		int[][] pBoard = Util.prepareForRender(board, player); //Prepare a version of the board with the available moves marked with a "3"
-		BufferedImage frame = renderer.renderPieces(background, pBoard); //Render the pieces onto the prerendered background
+		BufferedImage frame = renderer.renderPiecesOptimised(background, pBoard); //Render the pieces onto the prerendered background
 		BufferedImage scaledFrame = renderer.scale(frame, Util.SCALE); //Scale the resulting frame
 		g.drawImage(scaledFrame, 0, 0, this); //Copy the frame onto the screen
     }
