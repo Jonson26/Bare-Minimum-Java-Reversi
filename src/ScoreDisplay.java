@@ -21,7 +21,7 @@ public class ScoreDisplay extends JPanel{
 		JLabel titleLabel = new JLabel("REVERSI");
 		titleLabel.setFont(new Font("Serif", Font.BOLD, 36)); //Make the title *pretty*!
 		
-		JLabel copyrightLabel = new JLabel("©2025 Filip Jamroga");
+		JLabel copyrightLabel = new JLabel("©2025-2026 Filip Jamroga");
 		copyrightLabel.setFont(new Font("Courier New", Font.ITALIC, 12)); //And the subtitle too!
 		
 		bsLabel = new JLabel("");
