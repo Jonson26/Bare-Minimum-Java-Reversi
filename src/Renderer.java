@@ -49,69 +49,40 @@ public class Renderer{
 	
 	//Renders the provided game board onto the provided background image
 	public BufferedImage renderPieces(BufferedImage background, int[][] board){
-		BufferedImage out = new BufferedImage(Util.SIDE, Util.SIDE, BufferedImage.TYPE_INT_ARGB_PRE);
-		
-		Graphics g = out.getGraphics();
-		
-		g.drawImage(background, 0, 0, null);
-		
-        for(int i=0; i<8; i++){
-			for(int j=0; j<8; j++){
-				BufferedImage toDraw;
-				switch(board[j][i]){
-					case 0:
-						toDraw = empty;
-						break;
-					case 1:
-						toDraw = black;
-						break;
-					case 2:
-						toDraw = white;
-						break;
-					case 3:
-						toDraw = possible;
-						break;
-					default:
-						toDraw = black;
-						break;
-				}
-				g.drawImage(toDraw, Util.TILESIZE*i+1, Util.TILESIZE*j+1, null);
-			}
-		}
-		
-		return out;
-	}
-	
-	public BufferedImage renderPiecesOptimised(BufferedImage background, int[][] board){
 		if(buffer==null){
-			buffer = renderPieces(background, board);
-		}else{
+			buffer = new BufferedImage(Util.SIDE, Util.SIDE, BufferedImage.TYPE_INT_ARGB_PRE);
 			Graphics g = buffer.getGraphics();
-			for(int i=0; i<8; i++){
-				for(int j=0; j<8; j++){
-					if(prevboard[j][i]!=board[j][i]){
-						BufferedImage toDraw;
-						switch(board[j][i]){
-							case 0:
-								toDraw = empty;
-								g.setColor(Color.WHITE);
-								g.fillRect(Util.TILESIZE*i+1, Util.TILESIZE*j+1,empty.getWidth(),empty.getHeight());
-								break;
-							case 1:
-								toDraw = black;
-								break;
-							case 2:
-								toDraw = white;
-								break;
-							case 3:
-								toDraw = possible;
-								break;
-							default:
-								toDraw = black;
-								break;
-						}
-						g.drawImage(toDraw, Util.TILESIZE*i+1, Util.TILESIZE*j+1, null);
+			g.drawImage(background, 0, 0, null);
+			prevboard = new int[8][8];
+			for(int i=0; i<8; i++)
+				for(int j=0; j<8; j++)
+					prevboard[j][i] = -1;
+		}
+		Graphics g = buffer.getGraphics();
+		for(int i=0; i<8; i++){
+			for(int j=0; j<8; j++){
+				if(prevboard[j][i]!=board[j][i]){
+					BufferedImage toDraw;
+					switch(board[j][i]){
+						case 0:
+							toDraw = empty;
+							g.setColor(Color.WHITE);
+							g.fillRect(Util.TILESIZE*i+1, Util.TILESIZE*j+1,empty.getWidth(),empty.getHeight());
+							break;
+						case 1:
+							toDraw = black;
+							break;
+						case 2:
+							toDraw = white;
+							break;
+						case 3:
+							toDraw = possible;
+							break;
+						default:
+							toDraw = black;
+							break;
 					}
+					g.drawImage(toDraw, Util.TILESIZE*i+1, Util.TILESIZE*j+1, null);
 				}
 			}
 		}
